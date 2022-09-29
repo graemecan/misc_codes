@@ -23,6 +23,8 @@ for f in files:
 
 ncpus = len(fileDict[list(fileDict.keys())[0]]) ## Python 3 adjustment
 
+fileDict = dict(sorted(fileDict.items())) #Read files in numerical order (optional)
+
 print("Found "+str(len(fileDict.keys()))+" snapshots, on "+str(ncpus)+" cpus.")
 
 for snapshot in fileDict.keys():
@@ -70,7 +72,7 @@ for snapshot in fileDict.keys():
     recarray_types = [('x','<f8'),('y','<f8'),('z','<f8'),('vx','<f8'),('vy','<f8'),('vz','<f8'),('m','<f8'),('id','<i4'),('l','<i4')]
     data = np.rec.fromarrays((xpos,ypos,zpos,xvel,yvel,zvel,mp,idvals,levels),dtype=recarray_types)
 
-    inds = np.argsort(data['id'])
+    inds = np.argsort(data['id']) #Sort particles by ID value, because multiple MPI outputs are read in arbitrary order
     sorted_data = data[inds]
 
     outfile = datadir+"/p_"+str(snapshot).zfill(5)
